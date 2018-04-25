@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCrud.Tests", "EasyCrud.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCrud.DAO", "EasyCrud.DAO\EasyCrud.DAO.csproj", "{8DA828A9-DF2B-4E24-A455-A59E9F4ED85D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCrud.SampleWeb", "EasyCrud.SampleWeb\EasyCrud.SampleWeb.csproj", "{8EE1A560-3388-4DD9-9D63-B60322BF891E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCrud.Core", "EasyCrud.Core\EasyCrud.Core.csproj", "{875B3BC6-2364-4AF1-AF31-56FF4E7F0CB8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{8DA828A9-DF2B-4E24-A455-A59E9F4ED85D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DA828A9-DF2B-4E24-A455-A59E9F4ED85D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DA828A9-DF2B-4E24-A455-A59E9F4ED85D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EE1A560-3388-4DD9-9D63-B60322BF891E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EE1A560-3388-4DD9-9D63-B60322BF891E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EE1A560-3388-4DD9-9D63-B60322BF891E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EE1A560-3388-4DD9-9D63-B60322BF891E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{875B3BC6-2364-4AF1-AF31-56FF4E7F0CB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{875B3BC6-2364-4AF1-AF31-56FF4E7F0CB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{875B3BC6-2364-4AF1-AF31-56FF4E7F0CB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{875B3BC6-2364-4AF1-AF31-56FF4E7F0CB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

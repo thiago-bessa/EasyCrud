@@ -9,6 +9,8 @@ namespace EasyCrud.Model.Interfaces
 {
     public interface IPageWorkflow
     {
-        PageViewData GetPageViewData(Type type);
+        PageViewData GetPageViewData(string assemblyName, string contextName);
+        PageViewData GetPageViewData(string assemblyName, string contextName, string dbSet);
+        PageViewData GetPageViewData(string assemblyName, string contextName, string dbSet, int id);
     }
 }

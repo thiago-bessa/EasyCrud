@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -13,7 +14,25 @@ namespace EasyCrud.Workflow
 {
     public class PageWorkflow : IPageWorkflow
     {
-        public PageViewData GetPageViewData(Type type)
+        public PageViewData GetPageViewData(string assemblyName, string contextName)
+        {
+            var dbSets = GetDbSets(assemblyName, contextName);
+            return new PageViewData();
+        }
+
+        public PageViewData GetPageViewData(string assemblyName, string contextName, string dbSet)
+        {
+            var dbSetType = GetDbSetType(assemblyName, contextName, dbSet);
+            return GetPageViewData(dbSetType, null);
+        }
+
+        public PageViewData GetPageViewData(string assemblyName, string contextName, string dbSet, int id)
+        {
+            var dbSetType = GetDbSetType(assemblyName, contextName, dbSet);
+            return GetPageViewData(dbSetType, id);
+        }
+
+        private PageViewData GetPageViewData(Type type, int? id)
         {
             var pageViewData = new PageViewData
             {
@@ -48,8 +67,7 @@ namespace EasyCrud.Workflow
                 .Select(GetComponentViewData)
                 .ToList();
         }
-
-
+        
         private FieldViewData GetFieldViewData(PropertyInfo property)
         {
             var attributes = property.GetCustomAttributes(typeof(BaseFieldAttribute), true);
@@ -77,6 +95,41 @@ namespace EasyCrud.Workflow
             }
 
             return fieldViewData;
+        }
+
+        private Type GetDbSetType(string assemblyName, string contextName, string dbSet)
+        {
+            var context = GetDbContext(assemblyName, contextName);
+            var property = context.GetProperty(dbSet);
+
+            if (property == null)
+            {
+                throw new DbSetNotFoundException(contextName, dbSet);
+            }
+
+            if (property.PropertyType.GetGenericTypeDefinition() != typeof(DbSet<>))
+            {
+                throw new PropertyConfigurationException($"'{dbSet}' is not a DbSet<>");
+            }
+
+            return property.PropertyType.GenericTypeArguments.First();
+        }
+
+        private IEnumerable<Type> GetDbSets(string assemblyName, string contextName)
+        {
+            var context = GetDbContext(assemblyName, contextName);
+
+            return context
+                .GetProperties()
+                .Where(p => p.PropertyType.IsGenericType)
+                .Where(p => p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>))
+                .Select(p => p.PropertyType.GenericTypeArguments.First());
+        }
+
+        private Type GetDbContext(string assemblyName, string contextName)
+        {
+            var assembly = Assembly.Load(assemblyName);
+            return assembly.GetType(contextName);
         }
     }
 }

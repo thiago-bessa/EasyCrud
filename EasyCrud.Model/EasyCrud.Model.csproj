@@ -58,6 +58,7 @@
     <Compile Include="Database\EasyCrudContext.cs" />
     <Compile Include="Enums\DateTimeType.cs" />
     <Compile Include="Enums\TextType.cs" />
+    <Compile Include="Exceptions\DbSetNotFoundException.cs" />
     <Compile Include="Exceptions\PropertyConfigurationException.cs" />
     <Compile Include="Exceptions\UserAlreadyExistException.cs" />
     <Compile Include="Interfaces\IPageWorkflow.cs" />

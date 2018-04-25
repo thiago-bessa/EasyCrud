@@ -24,22 +24,37 @@ namespace EasyCrud.Tests
             action.Should().Throw<UserAlreadyExistException>("User already exists");
         }
 
-        
-        #region Mocks
-
-        class MockUserRepository : IUserRepository
+        [Test]
+        public void CreateUser()
         {
-            public void CreateUser(User user)
-            {
-                
-            }
+            var userRepository = new MockUserRepository();
+            var userWorkflow = new UserWorkflow(userRepository);
 
-            public bool CheckIfUserExists(string username)
-            {
-                return username == "existing_user";
-            }
+            userWorkflow.CreateUser("easy", "crud");
+            userRepository.CalledCreateUser.Should().BeTrue();
+            userRepository.User.Username.Should().Be("easy");
+        }
+    }
+
+
+    #region Mocks
+
+    public class MockUserRepository : IUserRepository
+    {
+        public bool CalledCreateUser { get; private set; }
+        public User User { get; private set; }
+
+        public void CreateUser(User user)
+        {
+            CalledCreateUser = true;
+            User = user;
         }
 
-        #endregion
+        public bool CheckIfUserExists(string username)
+        {
+            return username == "existing_user";
+        }
     }
+
+    #endregion
 }
