@@ -52,15 +52,7 @@ namespace EasyCrud.Tests
             Action getPageViewData = () => pageWorkflow.GetPageViewData("EasyCrud.Tests", "EasyCrud.Tests.MockContext", "WrongTypes");
             getPageViewData.Should().Throw<PropertyConfigurationException>("Only ICollection<> is allowed to have a ComponentAttribute");
         }
-
-        [Test]
-        public void ShouldThrowExceptionForWrongProperty()
-        {
-            var pageWorkflow = new PageWorkflow();
-            Action getPageViewData = () => pageWorkflow.GetPageViewData("EasyCrud.Tests", "EasyCrud.Tests.MockContext", "WrongPropertyType");
-            getPageViewData.Should().Throw<PropertyConfigurationException>("Only DbSet<> is allowed for EasyCrud");
-        }
-
+        
         [Test]
         public void ShouldThrowExceptionForDbSetNotFound()
         {
@@ -78,7 +70,6 @@ namespace EasyCrud.Tests
         public DbSet<MockSingleChildClass> SingleChild { get; set; }
         public DbSet<MockDoubleChildClass> DoubleChildren { get; set; }
         public DbSet<MockChildWrongType> WrongTypes { get; set; }
-        public List<string> WrongPropertyType { get; set; }
     }
 
     public class MockNoChildClass

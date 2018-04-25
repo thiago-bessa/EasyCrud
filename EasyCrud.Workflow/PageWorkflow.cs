@@ -16,34 +16,40 @@ namespace EasyCrud.Workflow
     {
         public PageViewData GetPageViewData(string assemblyName, string contextName)
         {
-            var dbSets = GetDbSets(assemblyName, contextName);
-            return new PageViewData();
+            return CreatePageViewData(assemblyName, contextName);
         }
 
         public PageViewData GetPageViewData(string assemblyName, string contextName, string dbSet)
         {
-            var dbSetType = GetDbSetType(assemblyName, contextName, dbSet);
-            return GetPageViewData(dbSetType, null);
+            return CreatePageViewData(assemblyName, contextName, dbSet);
         }
 
         public PageViewData GetPageViewData(string assemblyName, string contextName, string dbSet, int id)
         {
-            var dbSetType = GetDbSetType(assemblyName, contextName, dbSet);
-            return GetPageViewData(dbSetType, id);
+            return CreatePageViewData(assemblyName, contextName, dbSet, id);
         }
 
-        private PageViewData GetPageViewData(Type type, int? id)
+        private PageViewData CreatePageViewData(string assemblyName, string contextName, string setName = null, int? id = null)
         {
-            var pageViewData = new PageViewData
+            var pageViewData = new PageViewData();
+
+            var context = GetDbContext(assemblyName, contextName);
+            var dbSets = GetDbSets(context);
+
+            pageViewData.Menu = GetMenuViewData(dbSets);
+
+            if (!string.IsNullOrWhiteSpace(setName))
             {
-                MainComponent = GetComponentViewData(type),
-                Components = GetChildrenComponentViewData(type)
-            };
+                var dbSetType = GetDbSetType(dbSets, contextName, setName);
+
+                pageViewData.MainComponent = GetComponentViewData(dbSetType, id);
+                pageViewData.Components = GetChildrenComponentViewData(dbSetType, id);
+            }
 
             return pageViewData;
         }
 
-        private ComponentViewData GetComponentViewData(Type type)
+        private ComponentViewData GetComponentViewData(Type type, int? id)
         {
             var componentViewData = new ComponentViewData();
 
@@ -53,7 +59,7 @@ namespace EasyCrud.Workflow
             return componentViewData;
         }
 
-        private List<ComponentViewData> GetChildrenComponentViewData(Type type)
+        private List<ComponentViewData> GetChildrenComponentViewData(Type type, int? id)
         {
             var components = type.GetProperties().Where(p => Attribute.IsDefined(p, typeof(BaseComponentAttribute), true)).ToArray();
 
@@ -63,8 +69,8 @@ namespace EasyCrud.Workflow
             }
 
             return components
-                .Select(component => component.PropertyType.GenericTypeArguments.First())
-                .Select(GetComponentViewData)
+                .Select(property => property.PropertyType.GenericTypeArguments.First())
+                .Select(component => GetComponentViewData(component, id))
                 .ToList();
         }
         
@@ -97,36 +103,34 @@ namespace EasyCrud.Workflow
             return fieldViewData;
         }
 
-        private Type GetDbSetType(string assemblyName, string contextName, string dbSet)
+        private static MenuViewData GetMenuViewData(Dictionary<string, Type> dbSets)
         {
-            var context = GetDbContext(assemblyName, contextName);
-            var property = context.GetProperty(dbSet);
-
-            if (property == null)
+            return new MenuViewData
             {
-                throw new DbSetNotFoundException(contextName, dbSet);
-            }
-
-            if (property.PropertyType.GetGenericTypeDefinition() != typeof(DbSet<>))
-            {
-                throw new PropertyConfigurationException($"'{dbSet}' is not a DbSet<>");
-            }
-
-            return property.PropertyType.GenericTypeArguments.First();
+                MenuItems = dbSets.Select(set => set.Key)
+            };
         }
 
-        private IEnumerable<Type> GetDbSets(string assemblyName, string contextName)
+        private static Type GetDbSetType(Dictionary<string, Type> dbSets, string contextName, string setName)
         {
-            var context = GetDbContext(assemblyName, contextName);
+            if (!dbSets.ContainsKey(setName))
+            {
+                throw new DbSetNotFoundException(contextName, setName);
+            }
 
+            return dbSets[setName];
+        }
+
+        private static Dictionary<string, Type> GetDbSets(Type context)
+        {
             return context
                 .GetProperties()
                 .Where(p => p.PropertyType.IsGenericType)
                 .Where(p => p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>))
-                .Select(p => p.PropertyType.GenericTypeArguments.First());
+                .ToDictionary(p => p.Name, p => p.PropertyType.GenericTypeArguments.First());
         }
 
-        private Type GetDbContext(string assemblyName, string contextName)
+        private static Type GetDbContext(string assemblyName, string contextName)
         {
             var assembly = Assembly.Load(assemblyName);
             return assembly.GetType(contextName);

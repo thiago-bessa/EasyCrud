@@ -48,6 +48,7 @@
     <Compile Include="PageWorkflow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserWorkflow.cs" />
+    <Compile Include="WorkflowFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EasyCrud.DAO\EasyCrud.DAO.csproj">

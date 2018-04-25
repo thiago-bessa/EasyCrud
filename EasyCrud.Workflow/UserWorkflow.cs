@@ -11,7 +11,7 @@ using EasyCrud.Model.Interfaces;
 
 namespace EasyCrud.Workflow
 {
-    public class UserWorkflow
+    public class UserWorkflow : IUserWorkflow
     {
         private readonly IUserRepository _userRepository;
 
