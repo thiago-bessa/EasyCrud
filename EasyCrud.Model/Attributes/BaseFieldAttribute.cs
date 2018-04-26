@@ -10,11 +10,11 @@ namespace EasyCrud.Model.Attributes
     public abstract class BaseFieldAttribute : Attribute
     {
         public abstract string ViewFile { get; }
-
-        public string Name { get; set; }
         
         public string Label { get; set; }
 
         public int Order { get; set; }
+
+        public bool ReadOnly { get; set; }
     }
 }

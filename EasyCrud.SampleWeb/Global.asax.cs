@@ -8,6 +8,7 @@ using System.Web.Routing;
 using System.Web.Security;
 using System.Web.SessionState;
 using EasyCrud.Model.Database;
+using EasyCrud.SampleWeb.Model;
 
 namespace EasyCrud.SampleWeb
 {
@@ -18,7 +19,7 @@ namespace EasyCrud.SampleWeb
         {
             AreaRegistration.RegisterAllAreas();
 
-            Core.EasyCrud.SetUp(typeof(EasyCrudContext), RouteTable.Routes, "Admin");
+            Core.EasyCrud.SetUp(typeof(SampleContext), RouteTable.Routes, "Admin");
 
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

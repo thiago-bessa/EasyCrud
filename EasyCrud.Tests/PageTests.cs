@@ -74,19 +74,19 @@ namespace EasyCrud.Tests
 
     public class MockNoChildClass
     {
-        [Text(Name = "Name")]
+        [Text(Label = "Name")]
         public string Name { get; set; }
 
-        [Select]
+        [Selection]
         public int Selection { get; set; }
     }
 
     public class MockSingleChildClass
     {
-        [Text(Name = "Name")]
+        [Text(Label = "Name")]
         public string Name { get; set; }
 
-        [DateTime(Name = "BirthDate")]
+        [DateTime(Label = "BirthDate")]
         public DateTime BirthDate { get; set; }
 
         [ListComponent]
@@ -95,13 +95,13 @@ namespace EasyCrud.Tests
 
     public class MockDoubleChildClass
     {
-        [Text(Name = "Name")]
+        [Text(Label = "Name")]
         public string Name { get; set; }
 
-        [Boolean(Name = "Enabled")]
+        [Boolean(Label = "Enabled")]
         public bool Enabled { get; set; }
 
-        [Image(Name = "Image")]
+        [Image(Label = "Image")]
         public string Image { get; set; }
 
         [ListComponent]
@@ -113,7 +113,7 @@ namespace EasyCrud.Tests
 
     public class MockChildWrongType
     {
-        [Text(Name = "Name")]
+        [Text(Label = "Name")]
         public string Name { get; set; }
 
         [ListComponent]

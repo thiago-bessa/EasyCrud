@@ -95,7 +95,15 @@
     <None Include="Views\Edit.cshtml" />
     <None Include="Views\List.cshtml" />
     <None Include="Views\Index.cshtml" />
-    <Content Include="Views\_Layout.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <None Include="Views\Shared\Menu.cshtml" />
+    <Content Include="Web.config" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EasyCrud.Model\EasyCrud.Model.csproj">
@@ -106,6 +114,10 @@
       <Project>{e0485494-2149-42de-9237-6098ce7ba5bc}</Project>
       <Name>EasyCrud.Workflow</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Components\" />
+    <Folder Include="Views\Fields\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

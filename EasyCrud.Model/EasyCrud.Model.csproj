@@ -53,10 +53,11 @@
     <Compile Include="Attributes\DateTimeAttribute.cs" />
     <Compile Include="Attributes\ImageAttribute.cs" />
     <Compile Include="Attributes\ListComponentAttribute.cs" />
-    <Compile Include="Attributes\SelectAttribute.cs" />
+    <Compile Include="Attributes\SelectionAttribute.cs" />
     <Compile Include="Attributes\TextAttribute.cs" />
     <Compile Include="Database\EasyCrudContext.cs" />
     <Compile Include="Enums\DateTimeType.cs" />
+    <Compile Include="Enums\SelectionType.cs" />
     <Compile Include="Enums\TextType.cs" />
     <Compile Include="Exceptions\DbSetNotFoundException.cs" />
     <Compile Include="Exceptions\PropertyConfigurationException.cs" />

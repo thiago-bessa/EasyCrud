@@ -1,8 +1,9 @@
-﻿@using System.Web.Mvc.Html
+﻿@model EasyCrud.Model.ViewData.PageViewData
 @{
     ViewBag.Title = "Index";
-    Layout = "_Layout.cshtml";
+    Layout = "Shared/_Layout.cshtml";
 }
 
 <h1>Index for EasyCrud</h1>
 
+@Html.Raw(Model.Menu.MenuItems.First())

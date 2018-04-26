@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace EasyCrud.Model.Enums
 {
-    public enum TextType
+    public enum SelectionType
     {
         Default,
-        TextArea,
-        Html,
-        Password
+        Modal
     }
 }

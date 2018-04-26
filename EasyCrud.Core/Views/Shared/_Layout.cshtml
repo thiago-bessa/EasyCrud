@@ -6,6 +6,11 @@
     <title>@ViewBag.Title - EasyCrud Sample</title>
 </head>
 <body>
+    <div>
+        @{
+            Html.RenderPartial("~/Views/EasyCrud/Shared/Menu.cshtml", (Model as EasyCrud.Model.ViewData.PageViewData).Menu);
+        }
+    </div>
     <div class="container body-content">
         @RenderBody()
         <hr />

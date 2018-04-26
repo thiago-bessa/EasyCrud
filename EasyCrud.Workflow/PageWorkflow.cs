@@ -14,6 +14,8 @@ namespace EasyCrud.Workflow
 {
     public class PageWorkflow : IPageWorkflow
     {
+        #region Public Methods
+
         public PageViewData GetPageViewData(string assemblyName, string contextName)
         {
             return CreatePageViewData(assemblyName, contextName);
@@ -29,37 +31,53 @@ namespace EasyCrud.Workflow
             return CreatePageViewData(assemblyName, contextName, dbSet, id);
         }
 
-        private PageViewData CreatePageViewData(string assemblyName, string contextName, string setName = null, int? id = null)
+        #endregion
+
+        #region ViewData Methods
+
+        private static PageViewData CreatePageViewData(string assemblyName, string contextName, string setName = null, int? id = null)
         {
             var pageViewData = new PageViewData();
 
             var context = GetDbContext(assemblyName, contextName);
             var dbSets = GetDbSets(context);
 
-            pageViewData.Menu = GetMenuViewData(dbSets);
+            pageViewData.Menu = CreateMenuViewData(dbSets);
 
-            if (!string.IsNullOrWhiteSpace(setName))
+            if (string.IsNullOrWhiteSpace(setName))
+            {
+                
+            }
+            else
             {
                 var dbSetType = GetDbSetType(dbSets, contextName, setName);
 
-                pageViewData.MainComponent = GetComponentViewData(dbSetType, id);
-                pageViewData.Components = GetChildrenComponentViewData(dbSetType, id);
+                pageViewData.MainComponent = CreateComponentViewData(dbSetType, id);
+                pageViewData.Components = CreateChildrenComponentViewData(dbSetType, id);
             }
 
             return pageViewData;
         }
 
-        private ComponentViewData GetComponentViewData(Type type, int? id)
+        private static MenuViewData CreateMenuViewData(Dictionary<string, Type> dbSets)
         {
-            var componentViewData = new ComponentViewData();
-
-            var properties = type.GetProperties().Where(p => Attribute.IsDefined(p, typeof(BaseFieldAttribute), true));
-            componentViewData.Fields.AddRange(properties.Select(GetFieldViewData));
-
-            return componentViewData;
+            return new MenuViewData
+            {
+                MenuItems = dbSets.Select(set => set.Key)
+            };
         }
 
-        private List<ComponentViewData> GetChildrenComponentViewData(Type type, int? id)
+        private static ComponentViewData CreateComponentViewData(Type type, int? id)
+        {
+            var properties = type.GetProperties().Where(p => Attribute.IsDefined(p, typeof(BaseFieldAttribute), true));
+
+            return new ComponentViewData
+            {
+                 Fields = properties.Select(CreateFieldViewData).ToList()
+            };
+        }
+
+        private static List<ComponentViewData> CreateChildrenComponentViewData(Type type, int? id)
         {
             var components = type.GetProperties().Where(p => Attribute.IsDefined(p, typeof(BaseComponentAttribute), true)).ToArray();
 
@@ -70,11 +88,11 @@ namespace EasyCrud.Workflow
 
             return components
                 .Select(property => property.PropertyType.GenericTypeArguments.First())
-                .Select(component => GetComponentViewData(component, id))
+                .Select(component => CreateComponentViewData(component, id))
                 .ToList();
         }
         
-        private FieldViewData GetFieldViewData(PropertyInfo property)
+        private static FieldViewData CreateFieldViewData(PropertyInfo property)
         {
             var attributes = property.GetCustomAttributes(typeof(BaseFieldAttribute), true);
             var fieldViewData = new FieldViewData();
@@ -92,7 +110,7 @@ namespace EasyCrud.Workflow
                     case ImageAttribute image:
                         break;
 
-                    case SelectAttribute select:
+                    case SelectionAttribute selection:
                         break;
 
                     case TextAttribute text:
@@ -103,15 +121,11 @@ namespace EasyCrud.Workflow
             return fieldViewData;
         }
 
-        private static MenuViewData GetMenuViewData(Dictionary<string, Type> dbSets)
-        {
-            return new MenuViewData
-            {
-                MenuItems = dbSets.Select(set => set.Key)
-            };
-        }
+        #endregion
 
-        private static Type GetDbSetType(Dictionary<string, Type> dbSets, string contextName, string setName)
+        #region Reflection Methods
+
+        private static Type GetDbSetType(IReadOnlyDictionary<string, Type> dbSets, string contextName, string setName)
         {
             if (!dbSets.ContainsKey(setName))
             {
@@ -135,5 +149,7 @@ namespace EasyCrud.Workflow
             var assembly = Assembly.Load(assemblyName);
             return assembly.GetType(contextName);
         }
+
+        #endregion
     }
 }

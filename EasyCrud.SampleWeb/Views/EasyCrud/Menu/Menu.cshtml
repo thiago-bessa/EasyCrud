@@ -1,0 +1,10 @@
+﻿@model EasyCrud.Model.ViewData.MenuViewData
+<div>
+    <h3>Menu</h3>
+</div>
+
+@foreach (var item in Model.MenuItems)
+{
+    @Html.RenderPartial("MenuItem.cshtml", (object)item);
+}
+
