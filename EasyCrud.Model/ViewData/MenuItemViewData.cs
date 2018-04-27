@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace EasyCrud.Model.ViewData
 {
-    public class MenuViewData
+    public class MenuItemViewData
     {
-        public IEnumerable<MenuItemViewData> MenuItems { get; set; }
+        public string Label { get; set; }
+        public string Repository { get; set; }
+        public int Order { get; set; }
     }
 }

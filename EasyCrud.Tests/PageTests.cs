@@ -58,7 +58,7 @@ namespace EasyCrud.Tests
         {
             var pageWorkflow = new PageWorkflow();
             Action getPageViewData = () => pageWorkflow.GetPageViewData("EasyCrud.Tests", "EasyCrud.Tests.MockContext", "UnknownType");
-            getPageViewData.Should().Throw<DbSetNotFoundException>();
+            getPageViewData.Should().Throw<RepositoryNotFoundException>();
         }
     }
 

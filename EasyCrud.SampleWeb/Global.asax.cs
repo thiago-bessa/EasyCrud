@@ -7,6 +7,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Security;
 using System.Web.SessionState;
+using EasyCrud.Core;
 using EasyCrud.Model.Database;
 using EasyCrud.SampleWeb.Model;
 
@@ -17,10 +18,9 @@ namespace EasyCrud.SampleWeb
 
         protected void Application_Start(object sender, EventArgs e)
         {
+            EasyCrudController.SetUp(typeof(SampleContext), RouteTable.Routes, "Admin");
+
             AreaRegistration.RegisterAllAreas();
-
-            Core.EasyCrud.SetUp(typeof(SampleContext), RouteTable.Routes, "Admin");
-
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);

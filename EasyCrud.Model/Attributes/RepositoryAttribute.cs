@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EasyCrud.Model.ViewData
+namespace EasyCrud.Model.Attributes
 {
-    public class MenuViewData
+    public class RepositoryAttribute : BaseAttribute
     {
-        public IEnumerable<MenuItemViewData> MenuItems { get; set; }
     }
 }

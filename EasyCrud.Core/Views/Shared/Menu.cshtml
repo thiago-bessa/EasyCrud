@@ -1,10 +1,13 @@
 ﻿@model EasyCrud.Model.ViewData.MenuViewData
 <div>
     <h3>Menu</h3>
+    
+    <ul id="ezMenu">
+    @foreach (var item in Model.MenuItems)
+    {
+        <li id="MenuItem_@item.Repository">
+            <a href="@item.Repository">@item.Label</a>
+        </li>
+    }
+    </ul>
 </div>
-
-@foreach (var item in Model.MenuItems)
-{
-    <div><span>@item</span></div>
-}
-

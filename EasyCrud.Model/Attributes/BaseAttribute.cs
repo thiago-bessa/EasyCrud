@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace EasyCrud.Model.Attributes
 {
-    public abstract class BaseComponentAttribute : BaseAttribute
+    public class BaseAttribute : Attribute
     {
+        public string Label { get; set; }
+
+        public int Order { get; set; }
     }
 }

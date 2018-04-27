@@ -47,19 +47,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\BaseAttribute.cs" />
     <Compile Include="Attributes\BaseComponentAttribute.cs" />
     <Compile Include="Attributes\BaseFieldAttribute.cs" />
     <Compile Include="Attributes\BooleanAttribute.cs" />
     <Compile Include="Attributes\DateTimeAttribute.cs" />
     <Compile Include="Attributes\ImageAttribute.cs" />
     <Compile Include="Attributes\ListComponentAttribute.cs" />
+    <Compile Include="Attributes\RepositoryAttribute.cs" />
     <Compile Include="Attributes\SelectionAttribute.cs" />
     <Compile Include="Attributes\TextAttribute.cs" />
     <Compile Include="Database\EasyCrudContext.cs" />
     <Compile Include="Enums\DateTimeType.cs" />
     <Compile Include="Enums\SelectionType.cs" />
     <Compile Include="Enums\TextType.cs" />
-    <Compile Include="Exceptions\DbSetNotFoundException.cs" />
+    <Compile Include="Exceptions\RepositoryNotFoundException.cs" />
     <Compile Include="Exceptions\PropertyConfigurationException.cs" />
     <Compile Include="Exceptions\UserAlreadyExistException.cs" />
     <Compile Include="Interfaces\IPageWorkflow.cs" />
@@ -71,6 +73,7 @@
     <Compile Include="Database\User.cs" />
     <Compile Include="ViewData\ComponentViewData.cs" />
     <Compile Include="ViewData\FieldViewData.cs" />
+    <Compile Include="ViewData\MenuItemViewData.cs" />
     <Compile Include="ViewData\MenuViewData.cs" />
     <Compile Include="ViewData\PageViewData.cs" />
   </ItemGroup>
