@@ -27,18 +27,32 @@ namespace EasyCrud.Core.Translation
         {
             var html = Encoding.UTF8.GetString(buffer);
             var tokens = GetTokens(html);
-        
-
-            var translatedHtml = html.Replace("EasyCrud", "<span style=\"color: red\">The Wonderful EasyCrud!</span>");
-
+            var dictionary = Dictionary.GetDictionary();
+            var translatedHtml = GetTranslatedHtml(html, tokens, dictionary);
             return Encoding.UTF8.GetBytes(translatedHtml);
         }
 
-        private string[] GetTokens(string html)
+        private List<string> GetTokens(string html)
         {
-            var regex = new Regex("({TRANSLATION:)([A-Z/]*)(})", RegexOptions.IgnoreCase);
+            var regex = new Regex("({TRANSLATION:)([A-Z/.]*)(})", RegexOptions.IgnoreCase);
 
-            return new string[0];
+            return regex.Matches(html)
+                .Cast<Match>()
+                .Select(m => m.Value)
+                .Distinct()
+                .ToList();
+        }
+
+        private string GetTranslatedHtml(string html, List<string> tokens, Dictionary dictionary)
+        {
+            var translatedHtml = html;
+
+            foreach (var token in tokens)
+            {
+                translatedHtml = translatedHtml.Replace(token, dictionary.GetTranslation(token));
+            }
+
+            return translatedHtml;
         }
     }
 }
