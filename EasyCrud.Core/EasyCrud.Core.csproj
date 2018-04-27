@@ -93,9 +93,10 @@
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Views\Edit.cshtml" />
+    <None Include="Views\_ViewStart.cshtml" />
     <None Include="Views\List.cshtml" />
     <None Include="Views\Index.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\Layout.cshtml" />
     <None Include="Views\Shared\Menu.cshtml" />
     <Content Include="Web.config" />
     <None Include="Web.Debug.config">
