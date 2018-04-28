@@ -105,6 +105,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Dictionaries\en-us.json" />
     <None Include="packages.config" />
     <Content Include="Global.asax" />
     <Content Include="Views\Web.config" />

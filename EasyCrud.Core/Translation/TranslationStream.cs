@@ -45,7 +45,7 @@ namespace EasyCrud.Core.Translation
 
         private string GetTranslatedHtml(string html, List<string> tokens, Dictionary dictionary)
         {
-            var translatedHtml = html;
+            var translatedHtml = string.Copy(html);
 
             foreach (var token in tokens)
             {

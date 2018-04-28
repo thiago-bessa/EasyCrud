@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -10,26 +12,53 @@ namespace EasyCrud.Core.Translation
 {
     public class Dictionary
     {
-        private Dictionary<string, string> _translations;
+        #region Fields 
+
+        private readonly Dictionary<string, string> _translations;
+
+        #endregion
+
+        #region Constructors
 
         private Dictionary(string jsonDictionary)
         {
             _translations = new Dictionary<string, string>();
             SetUp(jsonDictionary);
         }
-        
-        public static Dictionary GetDictionary(string languageCode = null)
-        {
-            var exampleDictionary = "{ easycrud: 'The Wonderful EasyCrud!', complex:{ path: 'Got it!'} }";
 
-            return new Dictionary(exampleDictionary);
+        #endregion
+
+        #region Static Methods
+
+        public static Dictionary GetDictionary(string languageCode = "en-us")
+        {
+            var jsonDictionary = LoadDictionaryFromFile(languageCode);
+            return new Dictionary(jsonDictionary);
         }
+
+        private static string LoadDictionaryFromFile(string languageCode)
+        {
+            var path = HttpContext.Current.Server.MapPath($"~/Dictionaries/{languageCode}.json");
+
+            using (var reader = new StreamReader(path))
+            {
+                return reader.ReadToEnd();
+            }
+        }
+
+        #endregion
+
+        #region Public Methods
 
         public string GetTranslation(string token)
         {
             var key = token.ToLowerInvariant().Replace("{translation:", string.Empty).Replace("}", string.Empty);
-            return _translations[key];
+            return _translations.ContainsKey(key) ? _translations[key] : token.ToLowerInvariant().Replace("translation", "unknown");
         }
+
+        #endregion
+
+        #region SetUp
 
         private void SetUp(string jsonDictionary)
         {
@@ -59,5 +88,7 @@ namespace EasyCrud.Core.Translation
                     break;
             }
         }
+
+        #endregion
     }
 }
