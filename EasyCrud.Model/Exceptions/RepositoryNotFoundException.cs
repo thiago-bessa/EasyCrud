@@ -9,14 +9,9 @@ namespace EasyCrud.Model.Exceptions
     public class RepositoryNotFoundException : Exception
     {
         public RepositoryNotFoundException(string contextName, string repositoryName)
-            : base(GetMessage(contextName, repositoryName))
+            : base($"'{repositoryName}' was not found in '{contextName}'")
         {
 
-        }
-
-        private static string GetMessage(string contextName, string repositoryName)
-        {
-            return $"'{repositoryName}' was not found in '{contextName}'";
         }
     }
 }

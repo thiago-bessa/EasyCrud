@@ -109,6 +109,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EasyCrud.DAO\EasyCrud.DAO.csproj">
+      <Project>{8DA828A9-DF2B-4E24-A455-A59E9F4ED85D}</Project>
+      <Name>EasyCrud.DAO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EasyCrud.Model\EasyCrud.Model.csproj">
       <Project>{57027470-4E5B-4A36-8F4F-13FBA47F4781}</Project>
       <Name>EasyCrud.Model</Name>

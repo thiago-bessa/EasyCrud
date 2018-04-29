@@ -9,6 +9,12 @@ namespace EasyCrud.SampleWeb.Model
 {
     public class SampleContext : DbContext
     {
+        public SampleContext()
+            : base("Server=localhost\\SQLEXPRESS;Initial Catalog=EasyCrudSample;Trusted_Connection=Yes")
+        {
+            
+        }
+
         [Repository(Label = "Artistas", Order = 1)]
         public DbSet<Artist> Artists { get; set; }
 
@@ -20,6 +26,5 @@ namespace EasyCrud.SampleWeb.Model
 
         [Repository(Label = "Músicas", Order = 3)]
         public DbSet<Song> Songs { get; set; }
-        
     }
 }

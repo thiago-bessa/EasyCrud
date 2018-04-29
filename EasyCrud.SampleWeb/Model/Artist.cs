@@ -21,10 +21,10 @@ namespace EasyCrud.SampleWeb.Model
         [Text(Label = "About", Order = 2, Type = TextType.Html)]
         public string About { get; set; }
 
-        [ListComponent]
+        [ListComponent(Label = "Álbums", Order = 1)]
         public virtual ICollection<Album> Albums { get; set; }
 
-        [ListComponent]
+        [ListComponent(Label = "Músicas", Order = 2)]
         public virtual ICollection<Song> Songs { get; set; }
 
         public override string ToString()

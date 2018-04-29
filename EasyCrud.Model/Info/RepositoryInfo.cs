@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EasyCrud.Model.Attributes;
 
-namespace EasyCrud.Workflow.Model
+namespace EasyCrud.Model.Info
 {
     public class RepositoryInfo
     {

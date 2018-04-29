@@ -5,173 +5,152 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using EasyCrud.DAO;
 using EasyCrud.Model.Attributes;
 using EasyCrud.Model.Exceptions;
+using EasyCrud.Model.Helpers;
+using EasyCrud.Model.Info;
 using EasyCrud.Model.Interfaces;
 using EasyCrud.Model.ViewData;
-using EasyCrud.Workflow.Model;
 
 namespace EasyCrud.Workflow
 {
     public class PageWorkflow : IPageWorkflow
     {
+        #region Private Fields
+
+        private readonly string _contextName;
+        private readonly DbContextInfo _dbContextInfo;
+
+        #endregion
+
+        #region Constructors
+
+        public PageWorkflow(string assemblyName, string contextName)
+        {
+            _contextName = contextName;
+            _dbContextInfo = ReflectionTools.GetDbContextInfo(assemblyName, contextName);
+        }
+
+        #endregion
+
+
         #region Public Methods
 
-        public PageViewData GetPageViewData(string assemblyName, string contextName)
+        public PageViewData GetPageViewData()
         {
-            return CreatePageViewData(assemblyName, contextName);
+            return CreatePageViewData();
         }
 
-        public PageViewData GetPageViewData(string assemblyName, string contextName, string dbSet)
+        public PageViewData GetPageViewData(string repositoryName)
         {
-            return CreatePageViewData(assemblyName, contextName, dbSet);
+            return CreatePageViewData(repositoryName);
         }
 
-        public PageViewData GetPageViewData(string assemblyName, string contextName, string dbSet, int id)
+        public PageViewData GetPageViewData(string repositoryName, int id)
         {
-            return CreatePageViewData(assemblyName, contextName, dbSet, id);
+            return CreatePageViewData(repositoryName, id);
         }
 
         #endregion
 
         #region ViewData Methods
 
-        private static PageViewData CreatePageViewData(string assemblyName, string contextName, string repositoryName = null, int? id = null)
+        private PageViewData CreatePageViewData(string repositoryName = null, int? id = null)
         {
-            var pageViewData = new PageViewData();
-
-            var context = GetDbContext(assemblyName, contextName);
-            var repositories = GetRepositories(context);
-
-            pageViewData.Menu = CreateMenuViewData(repositories);
-
-            if (string.IsNullOrWhiteSpace(repositoryName))
+            var pageViewData = new PageViewData
             {
-                
-            }
-            else
-            {
-                var repository = GetRepository(repositories, contextName, repositoryName);
+                Menu = new MenuViewData(_dbContextInfo)
+            };
 
-                pageViewData.MainComponent = CreateComponentViewData(repository.Type, id);
+            if (!string.IsNullOrWhiteSpace(repositoryName))
+            {
+                var crudRepository = new EasyCrudRepository(_dbContextInfo, repositoryName);
+                var repository = _dbContextInfo.GetRepository(repositoryName);
+                pageViewData.MainComponent = CreateMainComponentViewData(repository.Type, repository.Label, id);
                 pageViewData.Components = CreateChildrenComponentViewData(repository.Type, id);
             }
 
             return pageViewData;
         }
-
-        private static MenuViewData CreateMenuViewData(Dictionary<string, RepositoryInfo> repositories)
-        {
-            return new MenuViewData
-            {
-                MenuItems = repositories.Select(repository => CreateMenuItemViewData(repository.Value))
-            };
-        }
-
-        private static MenuItemViewData CreateMenuItemViewData(RepositoryInfo repository)
-        {
-            return new MenuItemViewData
-            {
-                Label = repository.Label,
-                Repository = repository.Name,
-                Order = repository.Order
-            };
-        }
-
-        private static ComponentViewData CreateComponentViewData(Type repositoryType, int? id)
+        
+        private ComponentViewData CreateMainComponentViewData(Type repositoryType, string label, int? id)
         {
             var fields = repositoryType.GetProperties().Where(p => Attribute.IsDefined(p, typeof(BaseFieldAttribute), true));
 
             return new ComponentViewData
             {
-                 Fields = fields.Select(CreateFieldViewData).ToList()
+                Title = label,
+                Fields = fields.Select(CreateFieldViewData).ToList()
             };
         }
 
-        private static List<ComponentViewData> CreateChildrenComponentViewData(Type repositoryType, int? id)
+        private List<ComponentViewData> CreateChildrenComponentViewData(Type repositoryType, int? id)
         {
-            var components = repositoryType.GetProperties().Where(p => Attribute.IsDefined(p, typeof(BaseComponentAttribute), true)).ToArray();
+            var viewDatas = new List<ComponentViewData>();
 
-            if (components.Any(c => c.PropertyType.GetGenericTypeDefinition() != typeof(ICollection<>)))
+            var components = repositoryType.GetProperties().Where(p => Attribute.IsDefined(p, typeof(BaseComponentAttribute), true));
+
+            foreach (var component in components)
             {
-                throw new PropertyConfigurationException("Property with ComponentAttribute is not an ICollection<>");
+                if (component.PropertyType.GetGenericTypeDefinition() != typeof(ICollection<>))
+                {
+                    throw new PropertyConfigurationException($"Property '{component.Name}', with ComponentAttribute, is not an ICollection<>");
+                }
+
+                var componentAttribute = component.GetCustomAttribute<BaseAttribute>(true);
+                var componentType = component.PropertyType.GenericTypeArguments.First();
+                viewDatas.Add(CreateChildComponentViewData(componentType, componentAttribute.Label, componentAttribute.Order));
             }
 
-            return components
-                .Select(property => property.PropertyType.GenericTypeArguments.First())
-                .Select(component => CreateComponentViewData(component, id))
-                .ToList();
+            return viewDatas;
         }
-        
-        private static FieldViewData CreateFieldViewData(PropertyInfo field)
+
+        private ComponentViewData CreateChildComponentViewData(Type repositoryType, string label, int order)
         {
-            var attributes = field.GetCustomAttributes(typeof(BaseFieldAttribute), true);
-            var fieldViewData = new FieldViewData();
+            var fields = repositoryType.GetProperties().Where(p => Attribute.IsDefined(p, typeof(BaseFieldAttribute), true));
 
-            foreach (var attribute in attributes)
+            return new ComponentViewData
             {
-                switch (attribute)
-                {
-                    case BooleanAttribute boolean:
-                        break;
+                Title = label,
+                Order = order,
+                Fields = fields.Select(CreateFieldViewData).ToList()
+            };
+        }
 
-                    case DateTimeAttribute date:
-                        break;
+        private FieldViewData CreateFieldViewData(PropertyInfo field)
+        {
+            var attribute = field.GetCustomAttribute<BaseFieldAttribute>(true);
 
-                    case ImageAttribute image:
-                        break;
+            var fieldViewData = new FieldViewData
+            {
+                Label = attribute.Label,
+                ViewFile = attribute.ViewFile,
+                Order = attribute.Order,
+                ReadOnly = attribute.ReadOnly,
+                Column = field.Name
+            };
+            
+            switch (attribute)
+            {
+                case BooleanAttribute boolean:
+                    break;
 
-                    case SelectionAttribute selection:
-                        break;
+                case DateTimeAttribute date:
+                    break;
 
-                    case TextAttribute text:
-                        break;
-                }
+                case ImageAttribute image:
+                    break;
+
+                case SelectionAttribute selection:
+                    break;
+
+                case TextAttribute text:
+                    break;
+
             }
 
             return fieldViewData;
-        }
-
-        #endregion
-
-        #region Reflection Methods
-
-        private static RepositoryInfo GetRepository(IReadOnlyDictionary<string, RepositoryInfo> repositories, string contextName, string repositoryName)
-        {
-            if (!repositories.ContainsKey(repositoryName))
-            {
-                throw new RepositoryNotFoundException(contextName, repositoryName);
-            }
-
-            return repositories[repositoryName];
-        }
-
-        private static Dictionary<string, RepositoryInfo> GetRepositories(Type context)
-        {
-            return context
-                .GetProperties()
-                .Where(p => p.PropertyType.IsGenericType)
-                .Where(p => p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>) && p.CustomAttributes.Any(c => c.AttributeType == typeof(RepositoryAttribute)))
-                .ToDictionary(p => p.Name, GetRepositoryInfo);
-        }
-
-        private static RepositoryInfo GetRepositoryInfo(PropertyInfo repository)
-        {
-            var repositoryAttribute = repository.GetCustomAttribute<RepositoryAttribute>();
-            
-            return new RepositoryInfo
-            {
-                Name = repository.Name,
-                Label = repositoryAttribute.Label,
-                Order = repositoryAttribute.Order,
-                Type = repository.PropertyType.GenericTypeArguments.First()
-            };
-        }
-
-        private static Type GetDbContext(string assemblyName, string contextName)
-        {
-            var assembly = Assembly.Load(assemblyName);
-            return assembly.GetType(contextName);
         }
 
         #endregion

@@ -15,51 +15,51 @@ namespace EasyCrud.Tests
 
     public class PageTests
     {
-        [Test]
-        public void PageWithMainComponent()
-        {
-            var pageWorkflow = new PageWorkflow();
-            var pageViewData = pageWorkflow.GetPageViewData("EasyCrud.Tests", "EasyCrud.Tests.MockContext", "NoChildren");
+        //[Test]
+        //public void PageWithMainComponent()
+        //{
+        //    var pageWorkflow = new PageWorkflow();
+        //    var pageViewData = pageWorkflow.GetPageViewData("EasyCrud.Tests", "EasyCrud.Tests.MockContext", "NoChildren");
 
-            pageViewData.MainComponent.Should().NotBeNull();
-            pageViewData.Components.Count.Should().Be(0);
-        }
+        //    pageViewData.MainComponent.Should().NotBeNull();
+        //    pageViewData.Components.Count.Should().Be(0);
+        //}
 
-        [Test]
-        public void PageWithMainComponentAndOneChild()
-        {
-            var pageWorkflow = new PageWorkflow();
-            var pageViewData = pageWorkflow.GetPageViewData("EasyCrud.Tests", "EasyCrud.Tests.MockContext", "SingleChild");
+        //[Test]
+        //public void PageWithMainComponentAndOneChild()
+        //{
+        //    var pageWorkflow = new PageWorkflow();
+        //    var pageViewData = pageWorkflow.GetPageViewData("EasyCrud.Tests", "EasyCrud.Tests.MockContext", "SingleChild");
 
-            pageViewData.MainComponent.Should().NotBeNull();
-            pageViewData.Components.Count.Should().Be(1);
-        }
+        //    pageViewData.MainComponent.Should().NotBeNull();
+        //    pageViewData.Components.Count.Should().Be(1);
+        //}
 
-        [Test]
-        public void PageWithMainComponentAndTwoChildren()
-        {
-            var pageWorkflow = new PageWorkflow();
-            var pageViewData = pageWorkflow.GetPageViewData("EasyCrud.Tests", "EasyCrud.Tests.MockContext", "DoubleChildren");
+        //[Test]
+        //public void PageWithMainComponentAndTwoChildren()
+        //{
+        //    var pageWorkflow = new PageWorkflow();
+        //    var pageViewData = pageWorkflow.GetPageViewData("EasyCrud.Tests", "EasyCrud.Tests.MockContext", "DoubleChildren");
 
-            pageViewData.MainComponent.Should().NotBeNull();
-            pageViewData.Components.Count.Should().Be(2);
-        }
+        //    pageViewData.MainComponent.Should().NotBeNull();
+        //    pageViewData.Components.Count.Should().Be(2);
+        //}
 
-        [Test]
-        public void ShouldThrowExceptionForWrongPropertyOnDbSet()
-        {
-            var pageWorkflow = new PageWorkflow();
-            Action getPageViewData = () => pageWorkflow.GetPageViewData("EasyCrud.Tests", "EasyCrud.Tests.MockContext", "WrongTypes");
-            getPageViewData.Should().Throw<PropertyConfigurationException>("Only ICollection<> is allowed to have a ComponentAttribute");
-        }
+        //[Test]
+        //public void ShouldThrowExceptionForWrongPropertyOnDbSet()
+        //{
+        //    var pageWorkflow = new PageWorkflow();
+        //    Action getPageViewData = () => pageWorkflow.GetPageViewData("EasyCrud.Tests", "EasyCrud.Tests.MockContext", "WrongTypes");
+        //    getPageViewData.Should().Throw<PropertyConfigurationException>("Only ICollection<> is allowed to have a ComponentAttribute");
+        //}
         
-        [Test]
-        public void ShouldThrowExceptionForDbSetNotFound()
-        {
-            var pageWorkflow = new PageWorkflow();
-            Action getPageViewData = () => pageWorkflow.GetPageViewData("EasyCrud.Tests", "EasyCrud.Tests.MockContext", "UnknownType");
-            getPageViewData.Should().Throw<RepositoryNotFoundException>();
-        }
+        //[Test]
+        //public void ShouldThrowExceptionForDbSetNotFound()
+        //{
+        //    var pageWorkflow = new PageWorkflow();
+        //    Action getPageViewData = () => pageWorkflow.GetPageViewData("EasyCrud.Tests", "EasyCrud.Tests.MockContext", "UnknownType");
+        //    getPageViewData.Should().Throw<RepositoryNotFoundException>();
+        //}
     }
 
     #region Mocks

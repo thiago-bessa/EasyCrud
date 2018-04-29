@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
 using EasyCrud.Core.Translation;
-using EasyCrud.Model.Database;
+using EasyCrud.DAO;
+using EasyCrud.Model.Interfaces;
+using EasyCrud.Model.ViewData;
 using EasyCrud.Workflow;
 
 namespace EasyCrud.Core
@@ -71,21 +73,30 @@ namespace EasyCrud.Core
         #region Actions
 
         public ActionResult Index(string assemblyName, string contextName)
-        {
-            var pageWorkflow = new PageWorkflow();
-            return View("~/Views/EasyCrud/Index.cshtml", pageWorkflow.GetPageViewData(assemblyName, contextName));
+        { 
+            return GetPageViewData(assemblyName, contextName, "~/Views/EasyCrud/Index.cshtml", pageWorkflow => pageWorkflow.GetPageViewData());
         }
 
         public ActionResult RepositoryList(string assemblyName, string contextName, string repositoryName)
         {
-            var pageWorkflow = new PageWorkflow();
-            return View("~/Views/EasyCrud/List.cshtml", pageWorkflow.GetPageViewData(assemblyName, contextName, repositoryName));
+            return GetPageViewData(assemblyName, contextName, "~/Views/EasyCrud/List.cshtml", pageWorkflow => pageWorkflow.GetPageViewData(repositoryName));
         }
 
         public ActionResult RepositoryEdit(string assemblyName, string contextName, string repositoryName, int id)
         {
-            var pageWorkflow = new PageWorkflow();
-            return View("~/Views/EasyCrud/Edit.cshtml", pageWorkflow.GetPageViewData(assemblyName, contextName, repositoryName, id));
+            return GetPageViewData(assemblyName, contextName, "~/Views/EasyCrud/Edit.cshtml", pageWorkflow => pageWorkflow.GetPageViewData(repositoryName, id));
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private ActionResult GetPageViewData(string assemblyName, string contextName, string viewName, Func<IPageWorkflow, PageViewData> getPageViewData)
+        {
+            var repositoryFactory = new RepositoryFactory();
+            var workflowFactory = new WorkflowFactory(repositoryFactory);
+            var pageWorkflow = workflowFactory.GetPageWorkflow(assemblyName, contextName);
+            return View(viewName, getPageViewData.Invoke(pageWorkflow));
         }
 
         #endregion

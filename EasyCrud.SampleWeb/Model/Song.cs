@@ -25,16 +25,10 @@ namespace EasyCrud.SampleWeb.Model
         [Required]
         [Selection(Label = "Album", Order = 3)]
         public int AlbumId { get; set; }
-
-        [Required]
-        [Selection(Label = "Artist", Order = 4, Type = SelectionType.Modal)]
-        public int ArtistId { get; set; }
-
+        
         [ForeignKey("AlbumId")]
         public virtual Album Album { get; set; }
-
-        [ForeignKey("ArtistId")]
-        public virtual Artist Artist { get; set; }
+        
 
         public override string ToString()
         {

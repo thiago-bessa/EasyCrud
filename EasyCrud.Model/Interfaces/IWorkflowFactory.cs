@@ -8,7 +8,7 @@ namespace EasyCrud.Model.Interfaces
 {
     public interface IWorkflowFactory
     {
-        IPageWorkflow GetPageWorkflow();
+        IPageWorkflow GetPageWorkflow(string assemblyName, string contextName);
         IUserWorkflow GetUserWorkflow();
     }
 }

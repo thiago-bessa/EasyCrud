@@ -10,8 +10,8 @@ namespace EasyCrud.Workflow
 {
     public class WorkflowFactory : IWorkflowFactory
     {
-        private EasyCrudContext _crudContext;
-        private IRepositoryFactory _repositoryFactory;
+        private readonly EasyCrudContext _crudContext;
+        private readonly IRepositoryFactory _repositoryFactory;
 
         public WorkflowFactory(IRepositoryFactory repositoryFactory)
         {
@@ -19,9 +19,9 @@ namespace EasyCrud.Workflow
             _repositoryFactory = repositoryFactory;
         }
 
-        public IPageWorkflow GetPageWorkflow()
+        public IPageWorkflow GetPageWorkflow(string assemblyName, string contextName)
         {
-            return new PageWorkflow();
+            return new PageWorkflow(assemblyName, contextName);
         }
 
         public IUserWorkflow GetUserWorkflow()
