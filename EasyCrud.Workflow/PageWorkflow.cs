@@ -19,7 +19,6 @@ namespace EasyCrud.Workflow
     {
         #region Private Fields
 
-        private readonly string _contextName;
         private readonly DbContextInfo _dbContextInfo;
 
         #endregion
@@ -28,7 +27,6 @@ namespace EasyCrud.Workflow
 
         public PageWorkflow(string assemblyName, string contextName)
         {
-            _contextName = contextName;
             _dbContextInfo = ReflectionTools.GetDbContextInfo(assemblyName, contextName);
         }
 
@@ -65,31 +63,33 @@ namespace EasyCrud.Workflow
 
             if (!string.IsNullOrWhiteSpace(repositoryName))
             {
-                var crudRepository = new EasyCrudRepository(_dbContextInfo, repositoryName);
-                var repository = _dbContextInfo.GetRepository(repositoryName);
-                pageViewData.MainComponent = CreateMainComponentViewData(repository.Type, repository.Label, id);
-                pageViewData.Components = CreateChildrenComponentViewData(repository.Type, id);
+                var repositoryInfo = _dbContextInfo.GetRepository(repositoryName);
+                var dataRepository = new EasyCrudRepository(_dbContextInfo.DbContext, repositoryInfo);
+
+                pageViewData.MainComponent = CreateMainComponentViewData(repositoryInfo, dataRepository, id);
+                pageViewData.Components = CreateChildrenComponentViewData(repositoryInfo, dataRepository, id);
             }
 
             return pageViewData;
         }
         
-        private ComponentViewData CreateMainComponentViewData(Type repositoryType, string label, int? id)
+        private ComponentViewData CreateMainComponentViewData(RepositoryInfo repositoryInfo, IEasyCrudRepository dataRepository, int? id)
         {
-            var fields = repositoryType.GetProperties().Where(p => Attribute.IsDefined(p, typeof(BaseFieldAttribute), true));
+            var fields = repositoryInfo.Type.GetProperties().Where(p => Attribute.IsDefined(p, typeof(BaseFieldAttribute), true));
 
             return new ComponentViewData
             {
-                Title = label,
-                Fields = fields.Select(CreateFieldViewData).ToList()
+                Title = repositoryInfo.Label,
+                Fields = fields.Select(CreateFieldViewData).ToList(),
+                Entities = dataRepository.List()
             };
         }
 
-        private List<ComponentViewData> CreateChildrenComponentViewData(Type repositoryType, int? id)
+        private List<ComponentViewData> CreateChildrenComponentViewData(RepositoryInfo repositoryInfo, IEasyCrudRepository dataRepository, int? id)
         {
             var viewDatas = new List<ComponentViewData>();
 
-            var components = repositoryType.GetProperties().Where(p => Attribute.IsDefined(p, typeof(BaseComponentAttribute), true));
+            var components = repositoryInfo.Type.GetProperties().Where(p => Attribute.IsDefined(p, typeof(BaseComponentAttribute), true));
 
             foreach (var component in components)
             {

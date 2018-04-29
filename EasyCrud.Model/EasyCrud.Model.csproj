@@ -70,6 +70,7 @@
     <Compile Include="Helpers\ReflectionTools.cs" />
     <Compile Include="Info\DbContextInfo.cs" />
     <Compile Include="Info\RepositoryInfo.cs" />
+    <Compile Include="Interfaces\IEasyCrudRepository.cs" />
     <Compile Include="Interfaces\IPageWorkflow.cs" />
     <Compile Include="Interfaces\IRepositoryFactory.cs" />
     <Compile Include="Interfaces\IUserRepository.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Database\User.cs" />
     <Compile Include="ViewData\ComponentViewData.cs" />
+    <Compile Include="ViewData\EntityViewData.cs" />
     <Compile Include="ViewData\FieldViewData.cs" />
     <Compile Include="ViewData\MenuItemViewData.cs" />
     <Compile Include="ViewData\MenuViewData.cs" />

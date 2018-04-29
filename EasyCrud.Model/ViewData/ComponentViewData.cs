@@ -12,6 +12,7 @@ namespace EasyCrud.Model.ViewData
         public string Title { get; set; }
         public int Order { get; set; }
         public List<FieldViewData> Fields { get; set; }
+        public List<EntityViewData> Entities { get; set; }
 
         public ComponentViewData()
         {
