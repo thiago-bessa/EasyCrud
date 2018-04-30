@@ -1,0 +1,88 @@
+﻿body {
+    padding-top: 56px;
+    min-width: 1000px;
+}
+
+.sidebar{	
+    width: 270px;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    z-index: 1;
+    overflow-x: hidden;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.ec-navbar {
+    background-color: #192a56;
+}
+
+.menu {
+    padding-bottom: 134px;
+    overflow: auto;
+    height: 100%;
+}
+
+.sidebar-footer {
+    bottom: 0; 
+    left: 0; 
+    right: 0; 
+    position: absolute; 	
+    padding-bottom: 56px;
+    background-color: white;
+    text-align: center;
+}
+
+.main-area{
+    padding-left: 270px;
+    padding-top: 10px;
+}
+
+.ec-card {
+    border-radius: .25rem;
+    background-color: #f1f1f1;	
+    display: block;
+    max-width: 950px;
+}
+
+.ec-card-label {
+    background-color: #40739e;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+    color: white;
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-weight: bold;
+}
+
+.ec-card-container {
+    padding: 10px;
+}
+
+.ec-table-head{
+    background-color: #dcdde1;
+}
+
+.ec-active {
+    z-index: 2;
+    color: #fff;
+    background-color: #273c75;
+    border-color: #273c75;
+    font-weight: bold;
+}
+
+.ec-active:hover {
+    z-index: 2;
+    color: #fff;
+    background-color: #273c75;
+    border-color: #273c75;
+    font-weight: bold;
+}
+
+tr.clickable-row {
+    cursor: pointer;
+}

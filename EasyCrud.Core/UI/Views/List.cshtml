@@ -1,0 +1,43 @@
+﻿@model EasyCrud.Model.ViewData.PageViewData
+@{
+    ViewBag.Title = $"List - {Model.Name}";
+}
+
+<div class="ec-card">
+    <div class="ec-card-label">
+        List for @Model.Name
+    </div>
+    <div class="ec-card-container">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr class="ec-table-head">
+                    <th>Id</th>
+                    @foreach (var field in Model.MainComponent.Fields)
+                    {
+                        <th>@field.Label</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var entity in Model.MainComponent.Entities)
+            {
+                <tr class='clickable-row' data-href='@Context.ApplicationInstance.Request.Path.TrimEnd('/')/@entity.Id'>
+                    <td>@entity.Id</td>
+                    @foreach (var field in Model.MainComponent.Fields)
+                    {
+                        <td>@entity.Data[field.Column]</td>
+                    }
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function($) {
+        $(".clickable-row").click(function() {
+            window.location = $(this).data("href");
+        });
+    });
+</script>

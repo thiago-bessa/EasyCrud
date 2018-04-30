@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EasyCrud.Model.Database;
 using EasyCrud.Model.Interfaces;
+using EasyCrud.Model.Workflow;
 
 namespace EasyCrud.Workflow
 {
@@ -19,9 +20,9 @@ namespace EasyCrud.Workflow
             _repositoryFactory = repositoryFactory;
         }
 
-        public IPageWorkflow GetPageWorkflow(string assemblyName, string contextName)
+        public IPageWorkflow GetPageWorkflow(WorkflowParameters parameters)
         {
-            return new PageWorkflow(assemblyName, contextName);
+            return new PageWorkflow(parameters);
         }
 
         public IUserWorkflow GetUserWorkflow()

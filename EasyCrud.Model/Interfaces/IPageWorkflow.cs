@@ -11,6 +11,6 @@ namespace EasyCrud.Model.Interfaces
     {
         PageViewData GetPageViewData();
         PageViewData GetPageViewData(string repositoryName);
-        PageViewData GetPageViewData(string repositoryName, int id);
+        PageViewData GetPageViewData(string repositoryName, string id);
     }
 }

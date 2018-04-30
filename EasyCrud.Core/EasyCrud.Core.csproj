@@ -38,8 +38,10 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\EasyCrud.SampleWeb\Bin\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.8.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
@@ -51,6 +53,7 @@
       <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -92,14 +95,14 @@
     <Compile Include="Translation\TranslationStream.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="Views\Edit.cshtml" />
-    <None Include="Views\_ViewStart.cshtml" />
-    <None Include="Views\List.cshtml" />
-    <None Include="Views\Index.cshtml" />
-    <Content Include="Views\Shared\Layout.cshtml" />
-    <None Include="Views\Shared\Menu.cshtml" />
+    <None Include="UI\Views\Edit.cshtml" />
+    <None Include="UI\Views\_ViewStart.cshtml" />
+    <None Include="UI\Views\List.cshtml" />
+    <None Include="UI\Views\Index.cshtml" />
+    <Content Include="UI\Content\Styles.css" />
+    <Content Include="UI\Views\Shared\Layout.cshtml" />
+    <None Include="UI\Views\Shared\Menu.cshtml" />
     <Content Include="Web.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -109,9 +112,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EasyCrud.DAO\EasyCrud.DAO.csproj">
-      <Project>{8DA828A9-DF2B-4E24-A455-A59E9F4ED85D}</Project>
-      <Name>EasyCrud.DAO</Name>
+    <ProjectReference Include="..\EasyCrud.Data\EasyCrud.Data.csproj">
+      <Project>{6d3d5e17-75ab-4746-be3d-9a48b30b2c0f}</Project>
+      <Name>EasyCrud.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\EasyCrud.Model\EasyCrud.Model.csproj">
       <Project>{57027470-4E5B-4A36-8F4F-13FBA47F4781}</Project>
@@ -123,12 +126,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\Components\" />
-    <Folder Include="Views\Fields\" />
+    <Folder Include="UI\Scripts\" />
+    <Folder Include="UI\Views\Fields\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /E /I /Y "$(ProjectDir)Views" "$(SolutionDir)EasyCrud.SampleWeb\Views\EasyCrud\"</PostBuildEvent>
+    <PostBuildEvent>xcopy /E /I /Y "$(ProjectDir)UI\Views" "$(SolutionDir)EasyCrud.SampleWeb\Views\EasyCrud\"
+xcopy /E /I /Y "$(ProjectDir)UI\Content" "$(SolutionDir)EasyCrud.SampleWeb\Content\EasyCrud\"
+xcopy /E /I /Y "$(ProjectDir)UI\Scripts" "$(SolutionDir)EasyCrud.SampleWeb\Scripts\EasyCrud\"</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

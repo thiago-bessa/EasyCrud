@@ -287,5 +287,7 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 
-#ViewsDirectories
+#EasyCrudDirectories
+EasyCrud.SampleWeb/Contents/EasyCrud
+EasyCrud.SampleWeb/Scripts/EasyCrud
 EasyCrud.SampleWeb/Views/EasyCrud

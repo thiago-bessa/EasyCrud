@@ -1,0 +1,23 @@
+﻿@model EasyCrud.Model.ViewData.MenuViewData
+
+<div class="menu">
+    <div class="list-group">
+        @foreach (var item in Model.MenuItems)
+        {
+            if (item.IsActive)
+            {
+                <a id="MenuItem_@item.Repository" href="~/@Model.RouteAlias/@item.Repository" class="list-group-item list-group-item-action ec-active">@item.Label</a>
+            }
+            else
+            {
+                <a id="MenuItem_@item.Repository" href="~/@Model.RouteAlias/@item.Repository" class="list-group-item list-group-item-action">@item.Label</a>
+            }
+        }
+    </div>
+    <footer class="sidebar-footer">
+        <p>&copy; @DateTime.Now.Year - {translation:easycrud}</p>
+    </footer>
+</div>
+
+@*<a href="#" class="list-group-item list-group-item-action disabled">Vestibulum at eros</a>
+<a href="#" class="list-group-item list-group-item-action active">Cras justo odio</a>*@

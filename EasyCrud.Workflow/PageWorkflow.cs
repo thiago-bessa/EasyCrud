@@ -5,13 +5,15 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using EasyCrud.DAO;
+using EasyCrud.Data;
 using EasyCrud.Model.Attributes;
+using EasyCrud.Model.Data;
 using EasyCrud.Model.Exceptions;
 using EasyCrud.Model.Helpers;
 using EasyCrud.Model.Info;
 using EasyCrud.Model.Interfaces;
 using EasyCrud.Model.ViewData;
+using EasyCrud.Model.Workflow;
 
 namespace EasyCrud.Workflow
 {
@@ -20,19 +22,20 @@ namespace EasyCrud.Workflow
         #region Private Fields
 
         private readonly DbContextInfo _dbContextInfo;
+        private readonly string _routeAlias;
 
         #endregion
 
         #region Constructors
 
-        public PageWorkflow(string assemblyName, string contextName)
+        public PageWorkflow(WorkflowParameters parameters)
         {
-            _dbContextInfo = ReflectionTools.GetDbContextInfo(assemblyName, contextName);
+            _dbContextInfo = ReflectionTools.GetDbContextInfo(parameters.AssemblyName, parameters.ContextName);
+            _routeAlias = parameters.RouteAlias;
         }
 
         #endregion
-
-
+        
         #region Public Methods
 
         public PageViewData GetPageViewData()
@@ -45,7 +48,7 @@ namespace EasyCrud.Workflow
             return CreatePageViewData(repositoryName);
         }
 
-        public PageViewData GetPageViewData(string repositoryName, int id)
+        public PageViewData GetPageViewData(string repositoryName, string id)
         {
             return CreatePageViewData(repositoryName, id);
         }
@@ -54,11 +57,11 @@ namespace EasyCrud.Workflow
 
         #region ViewData Methods
 
-        private PageViewData CreatePageViewData(string repositoryName = null, int? id = null)
+        private PageViewData CreatePageViewData(string repositoryName = null, string id = null)
         {
             var pageViewData = new PageViewData
             {
-                Menu = new MenuViewData(_dbContextInfo)
+                Menu = new MenuViewData(_dbContextInfo, _routeAlias, repositoryName)
             };
 
             if (!string.IsNullOrWhiteSpace(repositoryName))
@@ -66,26 +69,43 @@ namespace EasyCrud.Workflow
                 var repositoryInfo = _dbContextInfo.GetRepository(repositoryName);
                 var dataRepository = new EasyCrudRepository(_dbContextInfo.DbContext, repositoryInfo);
 
+                pageViewData.Name = repositoryName;
                 pageViewData.MainComponent = CreateMainComponentViewData(repositoryInfo, dataRepository, id);
-                pageViewData.Components = CreateChildrenComponentViewData(repositoryInfo, dataRepository, id);
+
+                if (!string.IsNullOrWhiteSpace(id))
+                {
+                    pageViewData.Components = CreateChildrenComponentViewData(repositoryInfo, dataRepository, id);
+                }
             }
+
 
             return pageViewData;
         }
         
-        private ComponentViewData CreateMainComponentViewData(RepositoryInfo repositoryInfo, IEasyCrudRepository dataRepository, int? id)
+        private ComponentViewData CreateMainComponentViewData(RepositoryInfo repositoryInfo, IEasyCrudRepository dataRepository, string id)
         {
-            var fields = repositoryInfo.Type.GetProperties().Where(p => Attribute.IsDefined(p, typeof(BaseFieldAttribute), true));
+            var componentViewData = new ComponentViewData();
 
-            return new ComponentViewData
+            var fieldsViewData = repositoryInfo.Columns.Select(CreateFieldViewData).ToList();
+
+            var criteria = new Criteria
             {
-                Title = repositoryInfo.Label,
-                Fields = fields.Select(CreateFieldViewData).ToList(),
-                Entities = dataRepository.List()
+                Columns = fieldsViewData.Select(f => f.Column).ToList()
             };
+            
+            componentViewData.Title = repositoryInfo.Label;
+            componentViewData.Fields = fieldsViewData;
+
+            if (id == null)
+            {
+                var entities = dataRepository.List(criteria);
+                componentViewData.Entities = entities.Select(e => new EntityViewData { Id = e.Id, Data = e.Data }).ToList();
+            }
+
+            return componentViewData;
         }
 
-        private List<ComponentViewData> CreateChildrenComponentViewData(RepositoryInfo repositoryInfo, IEasyCrudRepository dataRepository, int? id)
+        private List<ComponentViewData> CreateChildrenComponentViewData(RepositoryInfo repositoryInfo, IEasyCrudRepository dataRepository, string id)
         {
             var viewDatas = new List<ComponentViewData>();
 
@@ -114,13 +134,13 @@ namespace EasyCrud.Workflow
             {
                 Title = label,
                 Order = order,
-                Fields = fields.Select(CreateFieldViewData).ToList()
+                //Fields = fields.Select(CreateFieldViewData).ToList()
             };
         }
 
-        private FieldViewData CreateFieldViewData(PropertyInfo field)
+        private FieldViewData CreateFieldViewData(ColumnInfo columnInfo)
         {
-            var attribute = field.GetCustomAttribute<BaseFieldAttribute>(true);
+            var attribute = columnInfo.PropertyInfo.GetCustomAttribute<BaseFieldAttribute>(true);
 
             var fieldViewData = new FieldViewData
             {
@@ -128,7 +148,7 @@ namespace EasyCrud.Workflow
                 ViewFile = attribute.ViewFile,
                 Order = attribute.Order,
                 ReadOnly = attribute.ReadOnly,
-                Column = field.Name
+                Column = columnInfo.Name
             };
             
             switch (attribute)

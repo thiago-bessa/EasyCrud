@@ -2,45 +2,43 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using EasyCrud.Model.Data;
 using EasyCrud.Model.Exceptions;
 using EasyCrud.Model.Info;
 using EasyCrud.Model.Interfaces;
 using EasyCrud.Model.ViewData;
 
-namespace EasyCrud.DAO
+namespace EasyCrud.Data
 {
     public class EasyCrudRepository : IEasyCrudRepository
     {
         private readonly DbSet _dbSet;
         private readonly DbContext _dbContext;
-        private readonly Type _repositoryType;
-        private readonly string _repositoryName;
+        private readonly RepositoryInfo _repositoryInfo;
 
         public EasyCrudRepository(DbContext context, RepositoryInfo repositoryInfo)
         {
             _dbContext = context;
-            _repositoryName = repositoryInfo.Name;
-            _repositoryType = repositoryInfo.Type;
-            _dbSet = context.Set(_repositoryType);
+            _repositoryInfo = repositoryInfo;
+            _dbSet = context.Set(repositoryInfo.Type);
         }
 
-        public List<EntityViewData> List()
+        public List<Entity> List(Criteria criteria)
         {
             return Task.Run(async () =>
             {
-                var entitiesViewData = new List<EntityViewData>();
-                var entities = await _dbSet.AsNoTracking().ToListAsync();
+                var entitiesViewData = new List<Entity>();
+                var dbEntities = await _dbSet.AsNoTracking().ToListAsync();
 
-                foreach (var entity in entities)
+                foreach (var dbEntity in dbEntities)
                 {
-                    entitiesViewData.Add(new EntityViewData
-                    {
-                        Data = _repositoryType
-                            .GetProperties()
-                            .ToDictionary(propertyInfo => propertyInfo.Name, propertyInfo => propertyInfo.GetValue(entity))
-                    });
+                    var entity = new Entity();
+
+                    _repositoryInfo.Columns.ForEach(c => entity.Data.Add(c.Name, c.PropertyInfo.GetValue(dbEntity)));
+                    entity.Id = _repositoryInfo.IdColumn.GetValue(dbEntity);
+
+                    entitiesViewData.Add(entity);
                 }
 
                 return entitiesViewData;
@@ -58,8 +56,7 @@ namespace EasyCrud.DAO
         {
             var entity = GetEntity(id);
 
-            return _repositoryType
-                .GetProperties()
+            return _repositoryInfo.Type.GetProperties()
                 .ToDictionary(propertyInfo => propertyInfo.Name, propertyInfo => propertyInfo.GetValue(entity));
         }
 
@@ -81,7 +78,7 @@ namespace EasyCrud.DAO
 
             if (entity == null)
             {
-                throw new EntityNotFoundException(_repositoryName, id);
+                throw new EntityNotFoundException(_repositoryInfo.Name, id);
             }
 
             return entity;
@@ -91,7 +88,7 @@ namespace EasyCrud.DAO
         {
             foreach (var pair in data)
             {
-                var property = _repositoryType.GetProperty(pair.Key);
+                var property = _repositoryInfo.Type.GetProperty(pair.Key);
 
                 if (property == null)
                 {

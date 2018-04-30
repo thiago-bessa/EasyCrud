@@ -12,12 +12,14 @@ namespace EasyCrud.Model.ViewData
         public string Label { get; set; }
         public string Repository { get; set; }
         public int Order { get; set; }
+        public bool IsActive { get; set; }
 
-        public MenuItemViewData(RepositoryInfo repositoryInfo)
+        public MenuItemViewData(RepositoryInfo repositoryInfo, string currentRepositoryName)
         {
             Label = repositoryInfo.Label;
             Repository = repositoryInfo.Name;
             Order = repositoryInfo.Order;
+            IsActive = repositoryInfo.Name.Equals(currentRepositoryName, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }

@@ -9,11 +9,13 @@ namespace EasyCrud.Model.ViewData
 {
     public class MenuViewData
     {
+        public string RouteAlias { get; set; }
         public IEnumerable<MenuItemViewData> MenuItems { get; set; }
 
-        public MenuViewData(DbContextInfo contextInfo)
+        public MenuViewData(DbContextInfo contextInfo, string routeAlias, string currentRepositoryName)
         {
-            MenuItems = contextInfo.GeAlltRepositories().Select(repository => new MenuItemViewData(repository));
+            RouteAlias = routeAlias;
+            MenuItems = contextInfo.GeAlltRepositories().Select(repository => new MenuItemViewData(repository, currentRepositoryName));
         }
     }
 }

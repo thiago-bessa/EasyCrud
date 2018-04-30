@@ -4,11 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EasyCrud.Model.ViewData
+namespace EasyCrud.Model.Data
 {
-    public class EntityViewData
+    public class Entity
     {
         public object Id { get; set; }
         public Dictionary<string, object> Data { get; set; }
+
+        public Entity()
+        {
+            Data = new Dictionary<string, object>();
+        }
     }
 }

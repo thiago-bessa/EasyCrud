@@ -4,7 +4,6 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using EasyCrud.DAO;
 using EasyCrud.Model.Database;
 using EasyCrud.Model.Exceptions;
 using EasyCrud.Model.Interfaces;

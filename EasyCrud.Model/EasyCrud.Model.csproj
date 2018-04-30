@@ -58,16 +58,21 @@
     <Compile Include="Attributes\SelectionAttribute.cs" />
     <Compile Include="Attributes\TextAttribute.cs" />
     <Compile Include="Database\EasyCrudContext.cs" />
+    <Compile Include="Data\Criteria.cs" />
+    <Compile Include="Data\Entity.cs" />
+    <Compile Include="Data\Filter.cs" />
     <Compile Include="Enums\DateTimeType.cs" />
     <Compile Include="Enums\SelectionType.cs" />
     <Compile Include="Enums\TextType.cs" />
     <Compile Include="Exceptions\ColumnNotFoundException.cs" />
     <Compile Include="Exceptions\EntityNotFoundException.cs" />
+    <Compile Include="Exceptions\IdColumnNotFoundException.cs" />
     <Compile Include="Exceptions\RepositoryNotFoundException.cs" />
     <Compile Include="Exceptions\PropertyConfigurationException.cs" />
     <Compile Include="Exceptions\TypeIsNotDbContextException.cs" />
     <Compile Include="Exceptions\UserAlreadyExistException.cs" />
     <Compile Include="Helpers\ReflectionTools.cs" />
+    <Compile Include="Info\ColumnInfo.cs" />
     <Compile Include="Info\DbContextInfo.cs" />
     <Compile Include="Info\RepositoryInfo.cs" />
     <Compile Include="Interfaces\IEasyCrudRepository.cs" />
@@ -84,6 +89,7 @@
     <Compile Include="ViewData\MenuItemViewData.cs" />
     <Compile Include="ViewData\MenuViewData.cs" />
     <Compile Include="ViewData\PageViewData.cs" />
+    <Compile Include="Workflow\WorkflowParameters.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

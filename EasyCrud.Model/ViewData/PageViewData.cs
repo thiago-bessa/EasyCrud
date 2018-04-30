@@ -8,6 +8,7 @@ namespace EasyCrud.Model.ViewData
 {
     public class PageViewData
     {
+        public string Name { get; set; }
         public MenuViewData Menu { get; set; }
         public ComponentViewData MainComponent { get; set; }
         public List<ComponentViewData> Components { get; set; }

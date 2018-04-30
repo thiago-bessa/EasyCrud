@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using EasyCrud.Model.Database;
 using EasyCrud.Model.Interfaces;
 
-namespace EasyCrud.DAO
+namespace EasyCrud.Data
 {
     public class RepositoryFactory : IRepositoryFactory
     {
