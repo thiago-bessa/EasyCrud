@@ -288,6 +288,6 @@ __pycache__/
 *.xsd.cs
 
 #EasyCrudDirectories
-EasyCrud.SampleWeb/Contents/EasyCrud
+EasyCrud.SampleWeb/Content/EasyCrud
 EasyCrud.SampleWeb/Scripts/EasyCrud
 EasyCrud.SampleWeb/Views/EasyCrud
