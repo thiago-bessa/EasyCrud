@@ -18,7 +18,24 @@
 
 .ec-navbar {
     background-color: #192a56;
+    /*background-color: #00a8ff;*/
 }
+
+.ec-active {
+    /*z-index: 2;
+    color: #fff;
+	background-color: #0097e6;
+	border-color: #0097e6;*/
+    font-weight: bold;
+}
+
+/*.ec-active:hover {
+	z-index: 2;
+    color: #fff;
+	background-color: #0097e6;
+	border-color: #0097e6;
+	font-weight: bold;
+}*/
 
 .menu {
     padding-bottom: 134px;
@@ -41,13 +58,6 @@
     padding-top: 10px;
 }
 
-.ec-card {
-    border-radius: .25rem;
-    background-color: #f1f1f1;	
-    display: block;
-    max-width: 950px;
-}
-
 .ec-card-label {
     background-color: #40739e;
     border-top-left-radius: .25rem;
@@ -59,30 +69,23 @@
     font-weight: bold;
 }
 
+.ec-card {
+    border-radius: .25rem;
+    background-color: #f5f6fa;	
+    display: block;
+    max-width: 950px;
+}
+
 .ec-card-container {
     padding: 10px;
 }
 
 .ec-table-head{
     background-color: #dcdde1;
+    color: white;
 }
 
-.ec-active {
-    z-index: 2;
-    color: #fff;
+.ec-btn-primary {
     background-color: #273c75;
     border-color: #273c75;
-    font-weight: bold;
-}
-
-.ec-active:hover {
-    z-index: 2;
-    color: #fff;
-    background-color: #273c75;
-    border-color: #273c75;
-    font-weight: bold;
-}
-
-tr.clickable-row {
-    cursor: pointer;
 }
