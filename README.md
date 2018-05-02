@@ -1,20 +1,25 @@
 # Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+The object of EasyCrud is to make it easier to develop simple websites that requires CRUD operations (similar to CMS).
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+Instead of having to develop each single page for CRUD operations for each single Table, you just have to add some "Attributes/Annotations" to your EF6 DbSets and Classe/Properties, and it will generate a menu, list, and edit pages automatically (By using Reflection).
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://www.visualstudio.com/en-us/docs/git/create-a-readme). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+ATTENTION: This is a personal project still in early stage of development
+
+
+# What is currently implemented (not necessarily 100% complete)
+- Reflection Methods
+- Attributes
+- Page Workflow
+- Dynamic CRUD Repository
+- ViewData
+- Dictionary
+- Translation Filter
+- Model Classes
+
+# What's next?
+- Factories
+- Views
+- Authentication
+- List Criteria/Filters
